@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/contact-us.css">
+    <!--Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../assets/Dsquare_favicon_32x32.png">
+    <title>Dsquare</title>
+</head>
+
+<body>
+    <header id="header">
+        <nav id="header-nav">
+            <div id="header-logo-div">
+                <img id="logo" src="../assets/bitmap-2.png" alt="Dsq Logo">
+            </div>
+            <ul id="header-nav-ul">
+                <div id="header-nav-ul-div">
+                    <li class="header-nav-ul-li"><a href="../index.html" class="header-nav-ul-li-a">Home</a></li>
+                    <li class="header-nav-ul-li"><a href="./services.html" class="header-nav-ul-li-a">Services</a>
+                    </li>
+                    <li class="header-nav-ul-li"><a href="./about-us.html" class="header-nav-ul-li-a">About Us</a>
+                    </li>
+                    <li class="header-nav-ul-li" id="selected-nav-ul-li"><a href="./contact-us.html"
+                            class="header-nav-ul-li-a" id="selected-nav-ul-li-a">Contact Us</a>
+                    </li>
+                </div>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main">
+        <div class="contact-flex">
+            <!-- -->
+            <div class="logo-side-view">
+                <!-- -->
+                <div class="logo-layer">
+                    <div class="inner-logo-layer">
+                        <!-- -->
+                        <img id="logo" src="../assets/bitmap-2.png" alt="Dsq Logo">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <form id="contact" action="https://formspree.io/f/xdkonvpz" method="post">
+                    <h3>Dsquare Contact Form</h3>
+                    <h4>Contact Dsquare for custom quote</h4>
+                    <fieldset>
+                        <input placeholder="Your name" type="text" tabindex="1" required autofocus>
+                    </fieldset>
+                    <fieldset>
+                        <input placeholder="Your Email Address" type="email" tabindex="2" required>
+                    </fieldset>
+                    <fieldset>
+                        <input placeholder="Your Phone Number (optional)" type="tel" tabindex="3" required>
+                    </fieldset>
+                    <fieldset>
+                        <input placeholder="Your Web Site (optional)" type="url" tabindex="4">
+                    </fieldset>
+                    <fieldset>
+                        <textarea placeholder="Type your message here...." tabindex="5" required></textarea>
+                    </fieldset>
+                    <fieldset>
+                        <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <footer id="page-footer">
+        <p>Dsquare Multiconcepts Ventures. 2025</p>
+    </footer>
+
+</body>
+
+</html>

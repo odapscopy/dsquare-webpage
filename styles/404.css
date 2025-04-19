@@ -1,0 +1,155 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    width: 100%;
+    height: 100vh;
+    overflow-x: hidden;
+}
+:root {
+    --header-bg-color: #046307;
+    --greenie: rgb(43, 80, 73);
+}
+
+/* ---------------------------- */
+#header{ 
+    padding: 2%;
+    background-color: var(--header-bg-color);
+    /*border: 1px solid black;*/
+}
+#header-nav{
+    display: flex;
+    flex-direction: row;
+    /*border: 1px solid red;*/
+    justify-content: space-between;
+    align-items: end;
+}
+#header-nav #header-logo-div {
+    width: 5%;
+    /* height: 4%; */
+    display: flex;
+    /*border: 1px solid white;*/
+}
+#logo {
+    width: 100%;
+    height: 100%;
+    /*border: 1px solid white;*/
+}
+#header-nav-ul{
+    /*border: 1px solid maroon;*/
+    text-decoration: none;
+    width: 70%;
+    height: 100%;
+}
+/* This div simple wraps around all the list
+   items to make it easy to flex them
+*/
+#header-nav-ul-div {
+    display: flex;
+    /*border: 1px solid blue;*/
+    height: 100%;
+    align-items: center; /* inconsequential, may remove */
+    justify-content: space-around;
+}
+.header-nav-ul-li{
+    /* border: 1px solid lime; */
+    text-decoration: none;
+    list-style-type: none;
+    font-size: 3.8svb;
+    color: white;
+}
+/* Necessary to make <a></a> link inside the <li></li> work appropriately */
+.header-nav-ul-li-a {
+    text-decoration: none;
+    list-style-type: none;
+    font-size: 3.8svb;
+    color: white;
+}
+#selected-nav-ul-li {
+    border: 1px solid white;
+    text-decoration: none;
+    background-color: antiquewhite;
+    border-radius: 4%;
+    padding: 2%;
+}
+#selected-nav-ul-li-a {
+    color: gray;
+}
+
+/* ---------------------------- */
+h1.page-title {
+    background-color: rgba(240, 255, 255, 0.5);
+    /*border: 1px solid black;*/
+    padding-top: 60px;
+    padding-bottom: 40px;
+    text-align: center;
+    font-family: "Klinic","ElenaWebBasic",Georgia,"Times New Roman",Times,serif;
+    font-weight: 550;
+}
+
+/* ---------------------------- */
+main {
+    background-color: azure;
+    padding-bottom: 4%;
+    margin-bottom: 2%;
+    /*min-height: 600px;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /*justify-content: space-around;*/
+    align-items: center;
+    height: 70vh;
+}
+
+main h1 {
+    width: 180px;
+    font-size: 2.4em;
+    font-weight: 500;
+}
+
+/*.buffer IS JUST A BLANK WHITE SPACE*/
+/* ---------------------------- */
+.buffer {
+    height: 11px;
+    background-color: white;
+}
+
+
+/* ---------------------------- */
+#page-footer {
+    /*width: 100%;*/
+    height: 20vh;
+    background-color: black;
+    padding: 2px;
+    margin-top: 4px;
+    height: 80px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#article h1 {
+    text-align: center;
+    /*border: 1px solid red;*/
+    font-family: 'Lato', sans-serif;
+    font-weight: light;
+    color: #012030;
+    margin-bottom: 2%;
+}
+#all-six-step-processes {
+    border: 1px solid saddlebrown; 
+    display: flex;
+}
+.a-step-process {
+    border: 1px solid orange;
+    display: flex;
+}
+.a-step-process {
+    flex-basis: 1;
+}
+.a-step-process .a-step-picture-illustration {
+    border: 1px solid gold;
+    flex-basis: 5;
+}
