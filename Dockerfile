@@ -22,7 +22,7 @@ RUN apt-get -y install musl-tools
 RUN rustup target add x86_64-unknown-linux-musl
 
 # This is a dummy build to get the dependencies cached.
-RUN cargo build --target x86_64-unknown-linux-musl --release
+#RUN cargo build --target x86_64-unknown-linux-musl --release
 
 # Now copy in the rest of the src code
 COPY src /usr/src/dsquare_webpage_docker/src/
