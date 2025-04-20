@@ -30,7 +30,7 @@ async fn main() {
         .layer(TraceLayer::new_for_http())
         .layer(CompressionLayer::new());
 
-    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 8090));
     tracing::info!("🚀 Server listening on {}", addr);
 
     // Build the server with graceful shutdown

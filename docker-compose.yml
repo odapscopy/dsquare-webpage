@@ -1,20 +1,16 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  web:
-    build: .
+  dsquare_webpage_axum_server_container:
+    #build: .
+    image: dsquare_webpage_docker:1.0
+    env_file: .env
     ports:
-      - '3000:3000'
+      - ${AXUM_SERVER_PORT}
     environment:
       - RUST_LOG=info
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:3000/']
+      test: ['CMD', 'curl', '-f', 'http://localhost:8090/']
       interval: 30s
       timeout: 10s
       retries: 3
-    networks:
-      - app-network
-
-networks:
-  app-network:
-    driver: bridge

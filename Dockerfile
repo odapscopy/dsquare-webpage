@@ -1,26 +1,51 @@
-# Stage 1: Build
-FROM rust:1.70-slim as builder
+FROM rust:1.71.0-slim as builder
 
-WORKDIR /app
-COPY . .
+WORKDIR /usr/src
 
-RUN cargo build --release
+# Create blank project. Remember to change the project's name to match the the name of your member-crate if you don't like the name `axum_postgres_docker`
+RUN USER=root cargo new dsquare_webpage_docker
 
-# Stage 2: Runtime
-FROM debian:bookworm-slim
+# We want dependencies cached, so copy those (Cargo.toml, Cargo.lock) first
+## PLEASE NOTE: I did copied 'Cargo.lock' because this particular project is not a workspace member, and has its own 'Cargo.lock'
+COPY Cargo.toml /usr/src/dsquare_webpage_docker/
+COPY Cargo.lock /usr/src/dsquare_webpage_docker/
 
-RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+# Set the working directory
+WORKDIR /usr/src/dsquare_webpage_docker
 
-COPY --from=builder /app/target/release/axum-webserver /usr/local/bin/
-COPY --from=builder /app/assets /usr/local/bin/assets
-COPY --from=builder /app/styles /usr/local/bin/styles
-COPY --from=builder /app/pages /usr/local/bin/pages
-COPY --from=builder /app/index.html /usr/local/bin/
+# Install 'musl-tools' to enable successful image build
+RUN apt-get -y update 
+RUN apt-get -y upgrade
+RUN apt-get -y install musl-tools
 
-WORKDIR /usr/local/bin
-ENV RUST_LOG=info
+## Install target platform (Cross-Compilation) --> Needed for Alpine
+RUN rustup target add x86_64-unknown-linux-musl
 
-EXPOSE 3000
-CMD ["axum-webserver"]
+# This is a dummy build to get the dependencies cached.
+RUN cargo build --target x86_64-unknown-linux-musl --release
+
+# Now copy in the rest of the src code
+COPY src /usr/src/dsquare_webpage_docker/src/
+
+# Copy 'assets', 'pages', 'styles' directory, and 'index.html' file too
+COPY assets /usr/src/dsquare_webpage_docker/assets
+COPY pages /usr/src/dsquare_webpage_docker/pages
+COPY styles /usr/src/dsquare_webpage_docker/styles
+COPY index.html /usr/src/dsquare_webpage_docker
+
+## Touch 'main.rs' to prevent cached release build
+RUN touch /usr/src/dsquare_webpage_docker/src/main.rs
+
+# This is the actual application build.
+RUN cargo build --target x86_64-unknown-linux-musl --release
+
+##### Runtime
+FROM alpine:3.16.0 AS runtime
+
+# Copy application binary from image 'builder'
+COPY --from=builder /usr/src/dsquare_webpage_docker/target/x86_64-unknown-linux-musl/release/dsquare_webpage_docker /usr/local/bin
+
+EXPOSE 8090
+
+# Run the application via 'dsquare_webpage_docker.exe'
+CMD ["/usr/local/bin/dsquare_webpage_docker"]
