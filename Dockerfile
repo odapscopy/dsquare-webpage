@@ -19,6 +19,9 @@ RUN apt-get -y update
 RUN apt-get -y upgrade
 RUN apt-get -y install musl-tools
 
+# Verify the musl-tools installation is correctly set up
+RUN musl-gcc --version
+
 ## Install target platform (Cross-Compilation) --> Needed for Alpine
 RUN rustup target add x86_64-unknown-linux-musl
 
@@ -37,6 +40,7 @@ COPY index.html /usr/src/dsquare_webpage_docker
 ## Touch 'main.rs' to prevent cached release build
 RUN touch /usr/src/dsquare_webpage_docker/src/main.rs
 
+RUN cargo clean
 # This is the actual application build.
 RUN cargo build --target x86_64-unknown-linux-musl --release
 RUN ls -l /usr/src/dsquare_webpage_docker/target/x86_64-unknown-linux-musl/release/
