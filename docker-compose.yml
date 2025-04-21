@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   dsquare_webpage_axum_server_container:
     #build: .
