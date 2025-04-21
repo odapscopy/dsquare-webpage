@@ -19,6 +19,7 @@ RUN apt-get -y update
 RUN apt-get -y upgrade
 RUN apt-get -y install musl-tools
 
+RUN apt-get -y install musl-gcc
 # Verify the musl-tools installation is correctly set up
 RUN musl-gcc --version
 
