@@ -54,4 +54,4 @@ COPY --from=builder /usr/src/dsquare_webpage_docker/target/x86_64-unknown-linux-
 EXPOSE 8090
 
 # Run the application via 'dsquare_webpage_docker.exe'
-CMD ["/usr/local/bin/dsquare_webpage_docker"]
+CMD ["/usr/local/bin/axum-webserver"]
