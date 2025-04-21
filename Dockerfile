@@ -49,7 +49,7 @@ RUN ls -l /usr/src/dsquare_webpage_docker/target/x86_64-unknown-linux-musl/relea
 FROM alpine:3.16.0 AS runtime
 
 # Copy application binary from image 'builder'
-COPY --from=builder /usr/src/dsquare_webpage_docker/target/x86_64-unknown-linux-musl/release/dsquare_webpage_docker /usr/local/bin
+COPY --from=builder /usr/src/dsquare_webpage_docker/target/x86_64-unknown-linux-musl/release/axum-webserver /usr/local/bin
 
 EXPOSE 8090
 
