@@ -42,7 +42,7 @@ RUN touch /usr/src/dsquare_webpage_docker/src/main.rs
 
 RUN cargo clean
 # This is the actual application build.
-RUN cargo build --target x86_64-unknown-linux-musl --release
+RUN cargo build --target x86_64-unknown-linux-musl --release --verbose
 RUN ls -l /usr/src/dsquare_webpage_docker/target/x86_64-unknown-linux-musl/release/
 
 ##### Runtime
