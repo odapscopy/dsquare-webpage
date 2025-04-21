@@ -39,6 +39,7 @@ RUN touch /usr/src/dsquare_webpage_docker/src/main.rs
 
 # This is the actual application build.
 RUN cargo build --target x86_64-unknown-linux-musl --release
+RUN ls -l /usr/src/dsquare_webpage_docker/target/x86_64-unknown-linux-musl/release/
 
 ##### Runtime
 FROM alpine:3.16.0 AS runtime
