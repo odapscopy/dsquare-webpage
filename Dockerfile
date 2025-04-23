@@ -15,7 +15,7 @@ COPY Cargo.lock /usr/src/dsquare_webpage_docker/
 WORKDIR /usr/src/dsquare_webpage_docker
 
 # Install 'musl-tools' to enable successful image build
-RUN apt-get -y update 
+RUN apt-get -y update
 RUN apt-get -y upgrade
 RUN apt-get -y install musl-tools
 
@@ -32,10 +32,10 @@ RUN cargo build --target x86_64-unknown-linux-musl --release
 COPY src /usr/src/dsquare_webpage_docker/src/
 
 # Copy 'assets', 'pages', 'styles' directory, and 'index.html' file too
-COPY assets /usr/src/dsquare_webpage_docker/assets
-COPY pages /usr/src/dsquare_webpage_docker/pages
-COPY styles /usr/src/dsquare_webpage_docker/styles
-COPY index.html /usr/src/dsquare_webpage_docker
+COPY assets /usr/src/dsquare_webpage_docker/assets/
+COPY pages /usr/src/dsquare_webpage_docker/pages/
+COPY styles /usr/src/dsquare_webpage_docker/styles/
+COPY index.html /usr/src/dsquare_webpage_docker/
 
 ## Touch 'main.rs' to prevent cached release build
 RUN touch /usr/src/dsquare_webpage_docker/src/main.rs
@@ -50,12 +50,18 @@ FROM alpine:3.16.0 AS runtime
 
 # Copy application binary from image 'builder'
 COPY --from=builder /usr/src/dsquare_webpage_docker/target/x86_64-unknown-linux-musl/release/axum-webserver /usr/local/bin
+# Copy static content directories
+COPY --from=builder /usr/src/dsquare_webpage_docker/assets /assets/
+COPY --from=builder /usr/src/dsquare_webpage_docker/pages /pages/
+COPY --from=builder /usr/src/dsquare_webpage_docker/styles /styles/
+COPY --from=builder /usr/src/dsquare_webpage_docker/index.html /
+
+# Set environment variable for content directories
+ENV CONTENT_DIRS=./pages,./assets,./styles,.
 
 EXPOSE 8090
 
-# Run the application via 'dsquare_webpage_docker.exe'
-#CMD ["/usr/local/bin/axum-webserver"]
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8080/ || exit 1
+  CMD curl -f http://localhost:8090/ || exit 1
 
 CMD ["/usr/local/bin/axum-webserver"]

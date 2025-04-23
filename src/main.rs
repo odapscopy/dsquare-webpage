@@ -1,13 +1,11 @@
 use axum::{
-    extract::State, // new code
+    extract::State,
     http::StatusCode,
     response::{Html, IntoResponse},
     routing::get,
     Router,
 };
-//use std::net::SocketAddr;
-use std::{env, net::SocketAddr, path::PathBuf, sync::Arc}; // new code
-                                                           // use tokio::signal;
+use std::{env, net::SocketAddr, path::PathBuf, sync::Arc};
 use tower_http::{
     compression::CompressionLayer,
     cors::{Any, CorsLayer},
@@ -15,10 +13,10 @@ use tower_http::{
     trace::TraceLayer,
 };
 
-// new code
+/// Application state that holds the content directories
 #[derive(Clone)]
 struct AppState {
-    content_dir: Arc<PathBuf>,
+    content_dirs: Arc<Vec<PathBuf>>,
 }
 
 #[tokio::main]
@@ -28,53 +26,26 @@ async fn main() {
         .with_max_level(tracing::Level::INFO)
         .init();
 
-    // new code
-    // Get content directory from environment variable or use current directory
-    let content_dir = env::var("CONTENT_DIR")
+    // Get multiple content directories from CONTENT_DIRS environment variable
+    let content_dirs: Vec<PathBuf> = env::var("CONTENT_DIRS")
+        .unwrap_or_else(|_| String::from("./pages,./assets,./styles,."))
+        .split(',')
         .map(PathBuf::from)
-        .unwrap_or_else(|_| env::current_dir().expect("Failed to get current directory"));
+        .collect();
 
-    // new code
-    tracing::info!("Serving content from: {}", content_dir.display());
-
-    // new code
-    /*let state = AppState {
-        content_dir: Arc::new(content_dir.clone()),
-    };*/
-
-    // Get content directory from environment variable or use current directory
-    let content_dir = env::var("CONTENT_DIR")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| env::current_dir().expect("Failed to get current directory"));
-
-    tracing::info!("Serving content from: {}", content_dir.display());
+    tracing::info!("Serving content from: {:?}", content_dirs);
 
     let state = AppState {
-        content_dir: Arc::new(content_dir.clone()),
+        content_dirs: Arc::new(content_dirs.clone()),
     };
 
     // Create our service router
-    let app = Router::new()
+    let mut app_router = Router::new()
         .route("/", get(serve_index))
         .route("/index", get(serve_home))
         .route("/services", get(serve_services))
         .route("/contact-us", get(serve_contact))
         .route("/about-us", get(serve_about_us))
-        //.nest_service("/pages", ServeDir::new("pages").precompressed_gzip())
-        .nest_service(
-            "/pages",
-            ServeDir::new(content_dir.join("pages")).precompressed_gzip(),
-        ) // new code
-        //.nest_service("/assets", ServeDir::new("assets").precompressed_gzip())
-        .nest_service(
-            "/assets",
-            ServeDir::new(content_dir.join("assets")).precompressed_gzip(),
-        ) // new code
-        //.nest_service("/styles", ServeDir::new("styles").precompressed_gzip())
-        .nest_service(
-            "/styles",
-            ServeDir::new(content_dir.join("styles")).precompressed_gzip(),
-        ) // new code
         .fallback(handle_404)
         // Add middleware for all routes
         .layer(
@@ -85,109 +56,122 @@ async fn main() {
         )
         .layer(TraceLayer::new_for_http())
         .layer(CompressionLayer::new())
-        .with_state(state); // new code
+        .with_state(state);
+
+    // Add static file serving for each content directory
+    for dir in &content_dirs {
+        let dir_name = dir
+            .file_name()
+            .and_then(|name| name.to_str())
+            .unwrap_or_else(|| {
+                tracing::warn!(
+                    "Could not determine directory name for {:?}, using default",
+                    dir
+                );
+                "static"
+            });
+
+        tracing::info!(
+            "Setting up nested service for {}: {}",
+            dir_name,
+            dir.display()
+        );
+
+        app_router = app_router.nest_service(
+            &format!("/{}", dir_name),
+            ServeDir::new(dir.clone()).precompressed_gzip(),
+        );
+    }
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 8090));
     tracing::info!("🚀 Server listening on {}", addr);
 
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, app_router).await.unwrap();
 }
 
-/*async fn serve_index() -> Result<Html<String>, AppError> {
-    serve_file("../index.html")
-}*/
-// new code
 async fn serve_index(State(state): State<AppState>) -> Result<Html<String>, AppError> {
-    serve_file(state.content_dir.join("index.html"))
+    serve_file("index.html", &state.content_dirs)
 }
 
-/*async fn serve_home() -> Result<Html<String>, AppError> {
-    serve_file("pages/home.html")
-}*/
-// new code
 async fn serve_home(State(state): State<AppState>) -> Result<Html<String>, AppError> {
-    serve_file(state.content_dir.join("pages/home.html"))
+    serve_file("pages/home.html", &state.content_dirs)
 }
 
-/*async fn serve_services() -> Result<Html<String>, AppError> {
-    serve_file("pages/services.html")
-}*/
-// new code
 async fn serve_services(State(state): State<AppState>) -> Result<Html<String>, AppError> {
-    serve_file(state.content_dir.join("pages/services.html"))
+    serve_file("pages/services.html", &state.content_dirs)
 }
 
-/*async fn serve_contact() -> Result<Html<String>, AppError> {
-    serve_file("pages/contact-us.html")
-}*/
-// new code
 async fn serve_contact(State(state): State<AppState>) -> Result<Html<String>, AppError> {
-    serve_file(state.content_dir.join("pages/contact-us.html"))
+    serve_file("pages/contact-us.html", &state.content_dirs)
 }
 
-/*async fn serve_about_us() -> Result<Html<String>, AppError> {
-    serve_file("pages/about-us.html")
-}*/
-// new code
 async fn serve_about_us(State(state): State<AppState>) -> Result<Html<String>, AppError> {
-    serve_file(state.content_dir.join("pages/about-us.html"))
+    serve_file("pages/about-us.html", &state.content_dirs)
 }
 
-/*fn serve_file(path: &str) -> Result<Html<String>, AppError> {
-    std::fs::read_to_string(path)
-        .map(Html)
-        .map_err(|_| AppError::NotFound)
-}*/
-// new code
-fn serve_file(path: PathBuf) -> Result<Html<String>, AppError> {
-    std::fs::read_to_string(&path).map(Html).map_err(|e| {
-        tracing::error!("Failed to read {}: {}", path.display(), e);
-        AppError::NotFound
-    })
+/// Attempt to serve a file from any of the content directories
+fn serve_file(filename: &str, content_dirs: &[PathBuf]) -> Result<Html<String>, AppError> {
+    for dir in content_dirs {
+        let file_path = dir.join(filename);
+        tracing::debug!("Checking file: {}", file_path.display());
+
+        if file_path.exists() {
+            return std::fs::read_to_string(&file_path)
+                .map(Html)
+                .map_err(|err| {
+                    tracing::error!("Failed to read {}: {}", file_path.display(), err);
+                    AppError::NotFound
+                });
+        }
+    }
+
+    tracing::warn!("File not found: {}", filename);
+    Err(AppError::NotFound)
 }
 
-/*async fn handle_404() -> impl IntoResponse {
-    (
-        StatusCode::NOT_FOUND,
-        Html(
-            std::fs::read_to_string("pages/404.html")
-                .unwrap_or_else(|_| String::from("Si vous plair! Page not found")),
-        ),
-    )
-}*/
-// new code
+/// Handler for 404 responses
 async fn handle_404(State(state): State<AppState>) -> impl IntoResponse {
-    let not_found_path = state.content_dir.join("pages/404.html");
-    (
-        StatusCode::NOT_FOUND,
-        Html(
-            std::fs::read_to_string(&not_found_path)
-                .unwrap_or_else(|_| String::from("Page not found")),
-        ),
-    )
+    // First try to find the custom 404 page
+    let not_found_path = state.content_dirs.iter().find_map(|dir| {
+        let path = dir.join("pages/404.html");
+        if path.exists() {
+            Some(path)
+        } else {
+            None
+        }
+    });
+
+    match not_found_path {
+        Some(path) => {
+            tracing::info!("Serving custom 404 page: {}", path.display());
+            match std::fs::read_to_string(&path) {
+                Ok(content) => (StatusCode::NOT_FOUND, Html(content)).into_response(),
+                Err(err) => {
+                    tracing::error!("Error reading 404 page: {}", err);
+                    (StatusCode::NOT_FOUND, Html("Page not found".to_string())).into_response()
+                }
+            }
+        }
+        None => {
+            tracing::warn!("Custom 404 page not found, using fallback.");
+            (StatusCode::NOT_FOUND, Html("Page not found".to_string())).into_response()
+        }
+    }
 }
 
+/// Application error types
 #[derive(Debug)]
 enum AppError {
     NotFound,
 }
 
-/*impl IntoResponse for AppError {
-    fn into_response(self) -> axum::response::Response {
-        (
-            StatusCode::NOT_FOUND,
-            Html(
-                std::fs::read_to_string("pages/404.html")
-                    .unwrap_or_else(|_| String::from("Epele! Page not found")),
-            ),
-        )
-            .into_response()
-    }
-}*/
-// new code
 impl IntoResponse for AppError {
     fn into_response(self) -> axum::response::Response {
-        (StatusCode::NOT_FOUND, Html(String::from("Page not found"))).into_response()
+        match self {
+            AppError::NotFound => {
+                (StatusCode::NOT_FOUND, Html("Page not found".to_string())).into_response()
+            }
+        }
     }
 }
