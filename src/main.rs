@@ -38,9 +38,9 @@ async fn main() {
     tracing::info!("Serving content from: {}", content_dir.display());
 
     // new code
-    let state = AppState {
+    /*let state = AppState {
         content_dir: Arc::new(content_dir.clone()),
-    };
+    };*/
 
     // Get content directory from environment variable or use current directory
     let content_dir = env::var("CONTENT_DIR")
