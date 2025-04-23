@@ -287,7 +287,7 @@ main {
 .greenie {
     /*border: 1px solid seashell;*/
     /*margin-top: -8%; */
-    height: 550px;
+    /*height: 550px;*/
     height: 440px;
     background-color: rgb(43,80,73);
     /*z-index: 100;*/
@@ -296,10 +296,13 @@ main {
 
 .greenie div.p-1 {
     /*border: 1px solid white;*/
-    width: 80%;
+    width: 100%;
+    padding-left: 8%;
+    padding-right: 8%;
     justify-self: center;
     color: white;
     font-size: 1.3em;
+    text-align: center;
 }
 /*@media (min-width: 30) {
     .greenie div.p-1 {
@@ -309,7 +312,9 @@ main {
 .greenie div.p-2 {
     margin-top: 2.5rem;
     /*border: 1px solid white;*/
-    width: 80%;
+    width: 100%;
+    padding-left: 8%;
+    padding-right: 8%;
     justify-self: center;
     text-align: center;
     color: white;
