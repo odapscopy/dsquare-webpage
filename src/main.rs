@@ -6,7 +6,12 @@ use axum::{
     Router,
 };
 use std::{env, net::SocketAddr, path::PathBuf, sync::Arc};
-use tower_http::{compression::CompressionLayer, services::ServeDir, trace::TraceLayer};
+use tower_http::{
+    compression::CompressionLayer,
+    cors::{Any, CorsLayer},
+    services::ServeDir,
+    trace::TraceLayer,
+};
 
 #[derive(Clone)]
 struct AppState {
@@ -51,6 +56,12 @@ async fn main() {
             ServeDir::new(content_dir.join("styles")).precompressed_gzip(),
         )
         .fallback(handle_404)
+        .layer(
+            CorsLayer::new()
+                .allow_origin(Any)
+                .allow_methods(Any)
+                .allow_headers(Any),
+        )
         .layer(TraceLayer::new_for_http())
         .layer(CompressionLayer::new())
         .with_state(state);
