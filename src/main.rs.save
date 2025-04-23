@@ -7,13 +7,8 @@ use axum::{
 };
 //use std::net::SocketAddr;
 use std::{env, net::SocketAddr, path::PathBuf, sync::Arc}; // new code
-                                                           // use tokio::signal;
-use tower_http::{
-    compression::CompressionLayer,
-    cors::{Any, CorsLayer},
-    services::ServeDir,
-    trace::TraceLayer,
-};
+// use tokio::signal;
+use tower_http::{cors::{CorsLayer, Any}, compression::CompressionLayer, services::ServeDir, trace::TraceLayer};
 
 // new code
 #[derive(Clone)]
@@ -27,28 +22,17 @@ async fn main() {
     tracing_subscriber::fmt()
         .with_max_level(tracing::Level::INFO)
         .init();
-
+    
     // new code
     // Get content directory from environment variable or use current directory
     let content_dir = env::var("CONTENT_DIR")
         .map(PathBuf::from)
         .unwrap_or_else(|_| env::current_dir().expect("Failed to get current directory"));
-
+    
     // new code
     tracing::info!("Serving content from: {}", content_dir.display());
-
+    
     // new code
-    let state = AppState {
-        content_dir: Arc::new(content_dir.clone()),
-    };
-
-    // Get content directory from environment variable or use current directory
-    let content_dir = env::var("CONTENT_DIR")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| env::current_dir().expect("Failed to get current directory"));
-
-    tracing::info!("Serving content from: {}", content_dir.display());
-
     let state = AppState {
         content_dir: Arc::new(content_dir.clone()),
     };
@@ -61,37 +45,37 @@ async fn main() {
         .route("/contact-us", get(serve_contact))
         .route("/about-us", get(serve_about_us))
         //.nest_service("/pages", ServeDir::new("pages").precompressed_gzip())
-        .nest_service(
-            "/pages",
-            ServeDir::new(content_dir.join("pages")).precompressed_gzip(),
-        ) // new code
+        .nest_service("/pages", ServeDir::new(content_dir.join("pages")).precompressed_gzip()) // new code
         //.nest_service("/assets", ServeDir::new("assets").precompressed_gzip())
-        .nest_service(
-            "/assets",
-            ServeDir::new(content_dir.join("assets")).precompressed_gzip(),
-        ) // new code
+        .nest_service("/assets", ServeDir::new(content_dir.join("assets")).append_index_html_on_director) // new code
         //.nest_service("/styles", ServeDir::new("styles").precompressed_gzip())
-        .nest_service(
-            "/styles",
-            ServeDir::new(content_dir.join("styles")).precompressed_gzip(),
-        ) // new code
+        .nest_service("/styles", ServeDir::new(content_dir.join("styles")).precompressed_gzip()) // new code
         .fallback(handle_404)
         // Add middleware for all routes
         .layer(
             CorsLayer::new()
                 .allow_origin(Any)
                 .allow_methods(Any)
-                .allow_headers(Any),
+                .allow_headers(Any)
         )
         .layer(TraceLayer::new_for_http())
         .layer(CompressionLayer::new())
         .with_state(state); // new code
-
+    
     let addr = SocketAddr::from(([0, 0, 0, 0], 8090));
     tracing::info!("🚀 Server listening on {}", addr);
 
+    // Build the server with graceful shutdown
     let listener = tokio::net::TcpListener::bind(&addr).await.unwrap();
+    /*let server = axum::Server::bind(&addr)
+    .serve(app.into_make_service())
+    .with_graceful_shutdown(shutdown_signal());*/
     axum::serve(listener, app).await.unwrap();
+
+    // Start the server and handle any errors
+    /*if let Err(e) = server.await {
+        tracing::error!("Server error: {}", e);
+    }*/
 }
 
 /*async fn serve_index() -> Result<Html<String>, AppError> {
