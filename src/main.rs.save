@@ -47,7 +47,7 @@ async fn main() {
         //.nest_service("/pages", ServeDir::new("pages").precompressed_gzip())
         .nest_service("/pages", ServeDir::new(content_dir.join("pages")).precompressed_gzip()) // new code
         //.nest_service("/assets", ServeDir::new("assets").precompressed_gzip())
-        .nest_service("/assets", ServeDir::new(content_dir.join("assets")).precompressed_gzip()) // new code
+        .nest_service("/assets", ServeDir::new(content_dir.join("assets")).append_index_html_on_director) // new code
         //.nest_service("/styles", ServeDir::new("styles").precompressed_gzip())
         .nest_service("/styles", ServeDir::new(content_dir.join("styles")).precompressed_gzip()) // new code
         .fallback(handle_404)
