@@ -10,22 +10,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../assets/Dsquare_favicon_32x32.png">
-    <title>Dsquare</title>
+    <title>Dsquare - Page Not Found</title>
 </head>
 
 <body>
     <header id="header">
         <nav id="header-nav">
             <div id="header-logo-div">
-                <img id="logo" src="../assets/bitmap-2.png" alt="Dsq Logo">
+                <a href="./home.html"><img id="logo" src="../assets/bitmap-2.png" alt="Dsq Logo"></a>
+            </div>
+            <!-- Hamburger Menu Button -->
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
             <ul id="header-nav-ul">
                 <div id="header-nav-ul-div">
                     <li class="header-nav-ul-li"><a href="../index.html" class="header-nav-ul-li-a">Home</a></li>
-                    <li class="header-nav-ul-li"><a href="./services.html" class="header-nav-ul-li-a">Services</a>
-                    </li>
-                    <li class="header-nav-ul-li"><a href="./about-us.html" class="header-nav-ul-li-a">About Us</a>
-                    </li>
+                    <li class="header-nav-ul-li"><a href="./services.html" class="header-nav-ul-li-a">Services</a></li>
+                    <li class="header-nav-ul-li"><a href="./about-us.html" class="header-nav-ul-li-a">About Us</a></li>
                     <li class="header-nav-ul-li"><a href="./contact-us.html" class="header-nav-ul-li-a">Contact Us</a>
                     </li>
                 </div>
@@ -33,11 +37,10 @@
         </nav>
     </header>
 
-    <!--<div id="buffer"></div>-->
     <h1 class="page-title">Oops! 404 - Page Not&nbsp;Found</h1>
 
     <main id="main">
-        <div id="404-error-display-div">
+        <div id="error-display-div">
             <h1>
                 Uh oh. This page does not exist. ¯\_(ツ)_/¯
             </h1>
@@ -50,6 +53,8 @@
         <p>Dsquare Multiconcepts Ventures. 2025</p>
     </footer>
 
+    <!-- JavaScript for mobile navigation -->
+    <script src="../scripts/mobile-nav.js"></script>
 </body>
 
 </html>

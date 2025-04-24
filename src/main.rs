@@ -28,7 +28,7 @@ async fn main() {
 
     // Get multiple content directories from CONTENT_DIRS environment variable
     let content_dirs: Vec<PathBuf> = env::var("CONTENT_DIRS")
-        .unwrap_or_else(|_| String::from("./pages,./assets,./styles,."))
+        .unwrap_or_else(|_| String::from("./pages,./assets,./styles,./scripts,."))
         .split(',')
         .map(PathBuf::from)
         .collect();

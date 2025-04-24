@@ -1,155 +1,307 @@
+/* Base styles and CSS reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-body{
-    width: 100%;
-    height: 100vh;
-    overflow-x: hidden;
-}
+
 :root {
     --header-bg-color: #046307;
     --greenie: rgb(43, 80, 73);
+    --text-color: white;
+    --footer-bg-color: black;
+    --main-bg-color: azure;
 }
 
-/* ---------------------------- */
-#header{ 
-    padding: 2%;
-    background-color: var(--header-bg-color);
-    /*border: 1px solid black;*/
+body {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: 'Lato', 'ElenaWebBasic', Georgia, 'Times New Roman', Times, serif;
+    display: flex;
+    flex-direction: column;
 }
-#header-nav{
+
+/* Header Styles */
+#header { 
+    padding: 15px;
+    background-color: var(--header-bg-color);
+    position: relative;
+}
+
+#header-nav {
     display: flex;
     flex-direction: row;
-    /*border: 1px solid red;*/
     justify-content: space-between;
-    align-items: end;
+    align-items: center;
 }
-#header-nav #header-logo-div {
-    width: 5%;
-    /* height: 4%; */
+
+#header-logo-div {
+    width: 40px;
+    height: 40px;
     display: flex;
-    /*border: 1px solid white;*/
+    align-items: center;
 }
+
 #logo {
     width: 100%;
-    height: 100%;
-    /*border: 1px solid white;*/
+    height: auto;
 }
-#header-nav-ul{
-    /*border: 1px solid maroon;*/
-    text-decoration: none;
-    width: 70%;
-    height: 100%;
+
+/* Mobile Navigation Menu */
+#header-nav-ul {
+    position: fixed;
+    top: 70px;
+    right: -100%;
+    width: 100%;
+    height: auto;
+    background-color: var(--header-bg-color);
+    transition: right 0.3s ease;
+    z-index: 100;
 }
-/* This div simple wraps around all the list
-   items to make it easy to flex them
-*/
+
+#header-nav-ul.active {
+    right: 0;
+}
+
+/* Hamburger Menu Icon */
+.hamburger {
+    display: block;
+    width: 30px;
+    height: 22px;
+    position: relative;
+    cursor: pointer;
+    z-index: 101;
+}
+
+.hamburger span {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: var(--text-color);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+.hamburger span:nth-child(1) {
+    top: 0;
+}
+
+.hamburger span:nth-child(2) {
+    top: 9px;
+}
+
+.hamburger span:nth-child(3) {
+    top: 18px;
+}
+
+.hamburger.active span:nth-child(1) {
+    transform: rotate(45deg);
+    top: 9px;
+}
+
+.hamburger.active span:nth-child(2) {
+    width: 0;
+    opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg);
+    top: 9px;
+}
+
 #header-nav-ul-div {
     display: flex;
-    /*border: 1px solid blue;*/
-    height: 100%;
-    align-items: center; /* inconsequential, may remove */
-    justify-content: space-around;
+    flex-direction: column;
+    width: 100%;
+    padding: 20px 0;
 }
-.header-nav-ul-li{
-    /* border: 1px solid lime; */
+
+.header-nav-ul-li {
     text-decoration: none;
     list-style-type: none;
-    font-size: 3.8svb;
-    color: white;
+    margin: 10px 0;
+    padding: 10px 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-/* Necessary to make <a></a> link inside the <li></li> work appropriately */
+
 .header-nav-ul-li-a {
     text-decoration: none;
-    list-style-type: none;
-    font-size: 3.8svb;
-    color: white;
+    color: var(--text-color);
+    font-size: 18px;
+    display: block;
+    padding: 5px;
 }
+
 #selected-nav-ul-li {
     border: 1px solid white;
-    text-decoration: none;
     background-color: antiquewhite;
-    border-radius: 4%;
-    padding: 2%;
+    border-radius: 4px;
+    padding: 8px;
 }
+
 #selected-nav-ul-li-a {
     color: gray;
 }
 
-/* ---------------------------- */
+/* Page Title */
 h1.page-title {
     background-color: rgba(240, 255, 255, 0.5);
-    /*border: 1px solid black;*/
-    padding-top: 60px;
-    padding-bottom: 40px;
+    padding: 30px 15px;
     text-align: center;
-    font-family: "Klinic","ElenaWebBasic",Georgia,"Times New Roman",Times,serif;
     font-weight: 550;
+    font-size: 24px;
 }
 
-/* ---------------------------- */
+/* Main Content */
 main {
-    background-color: azure;
-    padding-bottom: 4%;
-    margin-bottom: 2%;
-    /*min-height: 600px;*/
+    background-color: var(--main-bg-color);
+    padding: 30px 15px;
+    margin-bottom: 20px;
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /*justify-content: space-around;*/
     align-items: center;
-    height: 70vh;
+    text-align: center;
+}
+
+#404-error-display-div {
+    padding: 20px;
+    max-width: 100%;
 }
 
 main h1 {
-    width: 180px;
-    font-size: 2.4em;
+    width: 100%;
+    font-size: 22px;
     font-weight: 500;
+    line-height: 1.4;
 }
 
-/*.buffer IS JUST A BLANK WHITE SPACE*/
-/* ---------------------------- */
+/* Buffer */
 .buffer {
-    height: 11px;
+    height: 10px;
     background-color: white;
 }
 
-
-/* ---------------------------- */
+/* Footer */
 #page-footer {
-    /*width: 100%;*/
-    height: 20vh;
-    background-color: black;
-    padding: 2px;
-    margin-top: 4px;
-    height: 80px;
-    color: white;
+    background-color: var(--footer-bg-color);
+    padding: 20px 15px;
+    color: var(--text-color);
     display: flex;
     justify-content: center;
     align-items: center;
-}
-#article h1 {
     text-align: center;
-    /*border: 1px solid red;*/
-    font-family: 'Lato', sans-serif;
-    font-weight: light;
-    color: #012030;
-    margin-bottom: 2%;
+    font-size: 14px;
 }
-#all-six-step-processes {
-    border: 1px solid saddlebrown; 
-    display: flex;
+
+/* Medium screens - Tablets */
+@media screen and (min-width: 768px) {
+    /* Header adjustments */
+    #header-logo-div {
+        width: 50px;
+        height: 50px;
+    }
+    
+    /* Show horizontal nav bar */
+    .hamburger {
+        display: none;
+    }
+    
+    #header-nav-ul {
+        position: static;
+        width: 70%;
+        height: auto;
+        background-color: transparent;
+    }
+    
+    #header-nav-ul-div {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0;
+    }
+    
+    .header-nav-ul-li {
+        margin: 0;
+        padding: 0;
+        border-bottom: none;
+    }
+    
+    .header-nav-ul-li-a {
+        font-size: 16px;
+    }
+    
+    /* Content adjustments */
+    h1.page-title {
+        font-size: 28px;
+        padding: 40px 20px;
+    }
+    
+    main h1 {
+        font-size: 26px;
+        max-width: 500px;
+    }
 }
-.a-step-process {
-    border: 1px solid orange;
-    display: flex;
+
+/* Large screens - Desktops */
+@media screen and (min-width: 1024px) {
+    #header {
+        padding: 2%;
+    }
+    
+    #header-logo-div {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .header-nav-ul-li-a {
+        font-size: 18px;
+    }
+    
+    h1.page-title {
+        font-size: 32px;
+        padding: 60px 40px;
+    }
+    
+    main {
+        padding: 50px 30px;
+    }
+    
+    main h1 {
+        font-size: 30px;
+        max-width: 600px;
+    }
+    
+    #page-footer {
+        font-size: 16px;
+    }
 }
-.a-step-process {
-    flex-basis: 1;
+
+/* Extra large screens */
+@media screen and (min-width: 1440px) {
+    #header-logo-div {
+        width: 5%;
+    }
+    
+    .header-nav-ul-li-a {
+        font-size: 20px;
+    }
+    
+    h1.page-title {
+        font-size: 36px;
+    }
+    
+    main h1 {
+        font-size: 32px;
+    }
 }
-.a-step-process .a-step-picture-illustration {
-    border: 1px solid gold;
-    flex-basis: 5;
+
+/* Fix for invalid ID selector */
+#\34 04-error-display-div {
+    padding: 20px;
+    max-width: 100%;
 }

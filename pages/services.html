@@ -10,18 +10,24 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="../assets/Dsquare_favicon_32x32.png">
-    <title>Dsquare</title>
+    <title>Dsquare - Services</title>
 </head>
 
 <body>
     <header id="header">
         <nav id="header-nav">
             <div id="header-logo-div">
-                <img id="logo" src="../assets/bitmap-2.png" alt="Dsq Logo">
+                <a href="./home.html"><img id="logo" src="../assets/bitmap-2.png" alt="Dsq Logo"></a>
+            </div>
+            <!-- Hamburger Menu Button for Mobile -->
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
             <ul id="header-nav-ul">
                 <div id="header-nav-ul-div">
-                    <li class="header-nav-ul-li"><a href="../index.html" class="header-nav-ul-li-a">Home</a></li>
+                    <li class="header-nav-ul-li"><a href="./home.html" class="header-nav-ul-li-a">Home</a></li>
                     <li class="header-nav-ul-li" id="selected-nav-ul-li"><a href="./services.html"
                             class="header-nav-ul-li-a" id="selected-nav-ul-li-a">Services</a>
                     </li>
@@ -59,7 +65,7 @@
                         clients & customers convenient access to your goods and services.</p>
                 </div>
                 <div class="card">
-                    <h3>Digital strategy & consultation</h3>
+                    <h3>Digital Strategy & Consultation</h3>
                     <p>Partnering with us for digital strategy & consultation transforms your business by empowering you
                         and your team with applied technology that could boost your revenue streams or reduce
                         inefficacies. Having a solid digital strategy is definitely a great way to future proof your
@@ -77,6 +83,61 @@
         <p>Dsquare Multiconcepts Ventures. 2025</p>
     </footer>
 
+    <!-- JavaScript for mobile navigation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the hamburger button and navigation menu
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.getElementById('header-nav-ul');
+
+            // Check if elements exist
+            if (hamburger && navMenu) {
+                // Add click event to hamburger button
+                hamburger.addEventListener('click', function () {
+                    // Toggle active class on hamburger
+                    this.classList.toggle('active');
+
+                    // Toggle active class on navigation menu
+                    navMenu.classList.toggle('active');
+
+                    // Prevent scrolling when menu is open
+                    document.body.classList.toggle('menu-open');
+                });
+
+                // Close menu when clicking on a navigation link
+                const navLinks = document.querySelectorAll('.header-nav-ul-li-a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function () {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                        document.body.classList.remove('menu-open');
+                    });
+                });
+            }
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (event) {
+                if (navMenu.classList.contains('active') &&
+                    !navMenu.contains(event.target) &&
+                    !hamburger.contains(event.target)) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                }
+            });
+
+            // Handle window resize events
+            window.addEventListener('resize', function () {
+                // If window width is larger than 768px (tablet breakpoint)
+                // and menu is open, close it and restore scrolling
+                if (window.innerWidth >= 768 && navMenu && navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    if (hamburger) hamburger.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

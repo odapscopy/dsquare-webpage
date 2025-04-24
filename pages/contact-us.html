@@ -2,32 +2,42 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles/contact-us.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles/contact-us.css" />
     <!--Google Fonts-->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="../assets/Dsquare_favicon_32x32.png">
-    <title>Dsquare</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="../assets/Dsquare_favicon_32x32.png" />
+    <title>Dsquare - Contact Us</title>
 </head>
 
 <body>
     <header id="header">
         <nav id="header-nav">
             <div id="header-logo-div">
-                <img id="logo" src="../assets/bitmap-2.png" alt="Dsq Logo">
+                <a href="./home.html"><img id="logo" src="../assets/bitmap-2.png" alt="Dsq Logo"></a>
+            </div>
+            <!-- Hamburger Menu Button for Mobile -->
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
             <ul id="header-nav-ul">
                 <div id="header-nav-ul-div">
-                    <li class="header-nav-ul-li"><a href="../index.html" class="header-nav-ul-li-a">Home</a></li>
-                    <li class="header-nav-ul-li"><a href="./services.html" class="header-nav-ul-li-a">Services</a>
+                    <li class="header-nav-ul-li">
+                        <a href="./home.html" class="header-nav-ul-li-a">Home</a>
                     </li>
-                    <li class="header-nav-ul-li"><a href="./about-us.html" class="header-nav-ul-li-a">About Us</a>
+                    <li class="header-nav-ul-li">
+                        <a href="./services.html" class="header-nav-ul-li-a">Services</a>
                     </li>
-                    <li class="header-nav-ul-li" id="selected-nav-ul-li"><a href="./contact-us.html"
-                            class="header-nav-ul-li-a" id="selected-nav-ul-li-a">Contact Us</a>
+                    <li class="header-nav-ul-li">
+                        <a href="./about-us.html" class="header-nav-ul-li-a">About Us</a>
+                    </li>
+                    <li class="header-nav-ul-li" id="selected-nav-ul-li">
+                        <a href="./contact-us.html" class="header-nav-ul-li-a" id="selected-nav-ul-li-a">Contact Us</a>
                     </li>
                 </div>
             </ul>
@@ -36,13 +46,10 @@
 
     <main id="main">
         <div class="contact-flex">
-            <!-- -->
             <div class="logo-side-view">
-                <!-- -->
                 <div class="logo-layer">
                     <div class="inner-logo-layer">
-                        <!-- -->
-                        <img id="logo" src="../assets/bitmap-2.png" alt="Dsq Logo">
+                        <img id="logo" src="../assets/bitmap-2.png" alt="Dsq Logo" />
                     </div>
                 </div>
             </div>
@@ -51,33 +58,78 @@
                     <h3>Dsquare Contact Form</h3>
                     <h4>Contact Dsquare for custom quote</h4>
                     <fieldset>
-                        <input placeholder="Your name" type="text" tabindex="1" required autofocus>
+                        <input placeholder="Your name" type="text" tabindex="1" required autofocus />
                     </fieldset>
                     <fieldset>
-                        <input placeholder="Your Email Address" type="email" tabindex="2" required>
+                        <input placeholder="Your Email Address" type="email" tabindex="2" required />
                     </fieldset>
                     <fieldset>
-                        <input placeholder="Your Phone Number (optional)" type="tel" tabindex="3" required>
+                        <input placeholder="Your Phone Number (optional)" type="tel" tabindex="3" required />
                     </fieldset>
                     <fieldset>
-                        <input placeholder="Your Web Site (optional)" type="url" tabindex="4">
+                        <input placeholder="Your Web Site (optional)" type="url" tabindex="4" />
                     </fieldset>
                     <fieldset>
                         <textarea placeholder="Type your message here...." tabindex="5" required></textarea>
                     </fieldset>
                     <fieldset>
-                        <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">Submit</button>
+                        <button name="submit" type="submit" id="contact-submit" data-submit="...Sending">
+                            Submit
+                        </button>
                     </fieldset>
                 </form>
             </div>
         </div>
-
     </main>
 
     <footer id="page-footer">
         <p>Dsquare Multiconcepts Ventures. 2025</p>
     </footer>
 
+    <!-- JavaScript for mobile navigation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Get the hamburger button and navigation menu
+            const hamburger = document.querySelector('.hamburger');
+            const navMenu = document.getElementById('header-nav-ul');
+
+            // Check if elements exist
+            if (hamburger && navMenu) {
+                // Add click event to hamburger button
+                hamburger.addEventListener('click', function () {
+                    // Toggle active class on hamburger
+                    this.classList.toggle('active');
+
+                    // Toggle active class on navigation menu
+                    navMenu.classList.toggle('active');
+
+                    // Prevent scrolling when menu is open
+                    document.body.classList.toggle('menu-open');
+                });
+
+                // Close menu when clicking on a navigation link
+                const navLinks = document.querySelectorAll('.header-nav-ul-li-a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function () {
+                        hamburger.classList.remove('active');
+                        navMenu.classList.remove('active');
+                        document.body.classList.remove('menu-open');
+                    });
+                });
+            }
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function (event) {
+                if (navMenu.classList.contains('active') &&
+                    !navMenu.contains(event.target) &&
+                    !hamburger.contains(event.target)) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
