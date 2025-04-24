@@ -163,7 +163,7 @@ h1#our-services {
 }
 
 /* Main Content */
-main#main {
+/*main#main {
     width: 100%;
     background-color: var(--section-bg-color);
     padding: 20px 15px 40px;
@@ -173,6 +173,12 @@ main#main {
     align-items: center;
     font-family: 'Lato', sans-serif;
     min-height: auto;
+    flex: 1;
+}*/
+main {
+    background-color: azure;
+    padding: 20px 15px 30px;
+    margin-bottom: 2%;
     flex: 1;
 }
 

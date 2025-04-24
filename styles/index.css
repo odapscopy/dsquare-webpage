@@ -146,14 +146,13 @@ body {
 
 #selected-nav-ul-li {
     border: 1px solid white;
-    text-decoration: none;
-    background-color: var(--selected-bg-color);
+    background-color: antiquewhite;
     border-radius: 4px;
     padding: 8px;
 }
 
 #selected-nav-ul-li-a {
-    color: var(--selected-text-color);
+    color: gray;
 }
 
 /* Main Content */
